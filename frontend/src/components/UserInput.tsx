@@ -1,14 +1,9 @@
-import { useState } from 'react';
-import { Input } from "@heroui/react";
+import { TextInput } from '@mantine/core'
 
 export default function UserInput() {
-
     return (
         <>
-            <Input
-                label="Email"
-                type="email"
-            />
+            <TextInput variant="filled" size="lg" radius="xl" placeholder="Input component" className="text-red-500"/>
         </>
     )
 }
