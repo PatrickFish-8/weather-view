@@ -1,10 +1,11 @@
 'use client';
 import { TextInput, Button } from '@mantine/core'
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function UserInput({ onLocationSubmit }: { onLocationSubmit: (location: string) => void }) {
+export default function UserInput() {
     const [location, setLocation] = useState('');
-    
+    const router = useRouter();
     const gradient =
         'linear-gradient(45deg, #6d90b9 0%, #BBC7DC 100%)';
 
@@ -12,7 +13,11 @@ export default function UserInput({ onLocationSubmit }: { onLocationSubmit: (loc
         <form
             className="flex w-3/5 flex-row justify-center items-center gap-4"
             onSubmit={(e) => {
-                onLocationSubmit(location);
+                if(location != '') {
+                    e.preventDefault();
+                    router.push(`/?location=${encodeURIComponent(location)}`);
+                    setLocation('');
+                }
             }}
         >
             <TextInput
