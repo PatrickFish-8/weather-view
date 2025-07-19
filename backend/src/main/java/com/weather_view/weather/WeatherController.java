@@ -10,13 +10,11 @@ import org.springframework.web.client.RestClient;
 @RestController
 public class WeatherController {
 
-    @Value("${weather.api}")
-    private String weatherEndpoint;
     private final RestClient restClient;
-
-    public WeatherController(RestClient.Builder restClientBuilder) {
-		this.restClient = restClientBuilder.baseUrl("https://api.open-meteo.com/v1/forecast").build();
-	}
+    
+    public WeatherController(RestClient.Builder restClientBuilder, @Value("${weather.api}") String weatherEndpoint) {
+        this.restClient = restClientBuilder.baseUrl(weatherEndpoint).build();
+    }
     
     @GetMapping("/api/user_input")
     public Weather getWeather(@RequestParam("location") String location, @RequestParam("time") String time) {
