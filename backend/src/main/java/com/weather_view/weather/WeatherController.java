@@ -17,7 +17,7 @@ public class WeatherController {
     }
     
     @GetMapping("/api/user_input")
-    public Weather getWeather(@RequestParam("location") String location, @RequestParam("time") String time) {
-        return this.restClient.get().uri("?latitude=42.36&longitude=-71.06&current=temperature_2m,weather_code&temperature_unit=fahrenheit").retrieve().body(Weather.class);
+    public Weather getWeather(@RequestParam("longitude") String longitude, @RequestParam("latitude") String latitude) {
+        return this.restClient.get().uri("?latitude={latitude}&longitude={longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto", latitude, longitude).retrieve().body(Weather.class);
     }
 }
