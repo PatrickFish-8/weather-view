@@ -1,6 +1,9 @@
 package com.weather_view.location;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,10 +32,10 @@ public class LocationController {
             .uri(uri)
             .retrieve()
             .body(Location[].class);
-        if (locations != null) {
+        if (locations != null && locations.length != 0) {
             return locations[0];
         } else {
-            return null;
+            throw new IllegalArgumentException("Location not found for the given query: " + query);
         }
     }
 }
