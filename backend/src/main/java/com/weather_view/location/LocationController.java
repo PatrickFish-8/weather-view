@@ -11,8 +11,8 @@ public class LocationController {
     
     private final RestClient restClient;
 
-    public LocationController(RestClient.Builder restClientBuilder, @Value("${weather.api}") String weatherEndpoint) {
-        this.restClient = restClientBuilder.baseUrl(weatherEndpoint).build();
+    public LocationController(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder.baseUrl("").build();
     }
 
     @GetMapping("/api/location")
