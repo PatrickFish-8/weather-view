@@ -1,3 +1,7 @@
 package com.weather_view.image;
 
-public record Image() { }
+import java.util.List;
+
+public record Image(List<Prediction> predictions) {
+    public record Prediction(String mimeType, String bytesBase64Encoded, String prompt) { }
+}
