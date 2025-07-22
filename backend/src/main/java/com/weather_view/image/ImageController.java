@@ -3,6 +3,7 @@ package com.weather_view.image;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,12 +32,9 @@ public class ImageController {
             @RequestParam(value = "weather", required = false) String weather,
             @RequestParam(value = "time", required = false) String time,
             @RequestParam(value = "location", required = false) String location,
-            @Value("${google.project.id}") String googleProjId,
             @Value("${gcloud.auth.access.token}") String authAccessToken) {
 
-        // Create a prompt combining weather, time, and location
-        // String prompt = String.format("Generate an image depicting %s weather at %s in %s.", weather, time, location);
-        String prompt = "Generate an image depicting a man eating spaghetti.";
+        String prompt = String.format("Generate an image depicting %s weather at %s in %s.", weather, time, location);
 
         // Build the request payload
         Map<String, Object> request = new HashMap<>();
@@ -45,38 +43,34 @@ public class ImageController {
         List<Map<String,String>> instances = new ArrayList<>();
         instances.add(instance);
         request.put("instances", instances);
-
         Map<String,Integer> parameters = new HashMap<>();
         parameters.put("sampleCount", 1);
         request.put("parameters", parameters);
 
         String url = "https://us-east1-aiplatform.googleapis.com/v1/projects/weather-view-466219/locations/us-east1/publishers/google/models/imagen-3.0-generate-002:predict";
-        ResponseEntity<String> response = this.restClient.post()
+        ResponseEntity<Image> responseEntity = this.restClient.post()
             .uri(url)
             .header("Authorization", "Bearer " + authAccessToken)
             .contentType(MediaType.APPLICATION_JSON)
             .body(request)
             .retrieve()
-            .toEntity(String.class);
+            .toEntity(Image.class);
 
-    
-        // Parse the JSON response
-        String body = response.getBody();
-        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-        Map<String, Object> map = mapper.readValue(body, java.util.Map.class);
+        // get body of responseEntity and cast to Image object
+        Image response = responseEntity.getBody();
 
-        // Extract the base64 encoded image from the first prediction
-        List predictions = (List) map.get("predictions");
-        if (!predictions.isEmpty()) {
-            Map firstPrediction = (Map) predictions.get(0);
-            String base64Image = (String) firstPrediction.get("bytesBase64Encoded");
-
-            // Decode the image
+        if (response != null && !response.predictions().isEmpty()) {
+            String base64Image = response.predictions().get(0).bytesBase64Encoded();
+            // decode base64 image
             byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
-            // Write the image bytes to a file (e.g., generated_image.png)
-            Path imagePath = Paths.get("generated_image.png");
-            Files.write(imagePath, imageBytes);
+            Path imagePath = Paths.get("frontend/public/generated_image.png");
+            try {
+                // try to write value of imageBytes to imagePath
+                Files.write(imagePath, imageBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             System.out.println("Image saved to: " + imagePath.toAbsolutePath());
         } else {
