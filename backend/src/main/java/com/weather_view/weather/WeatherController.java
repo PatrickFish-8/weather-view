@@ -1,7 +1,6 @@
 package com.weather_view.weather;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
@@ -15,8 +14,8 @@ public class WeatherController {
     }
 
     public static Weather getWeather(
-        @RequestParam("longitude") String longitude, 
-        @RequestParam("latitude") String latitude
+        String longitude, 
+        String latitude
         ) {
         Weather response = restClient.get()
         .uri("?latitude={latitude}&longitude={longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto", latitude, longitude)
