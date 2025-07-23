@@ -13,28 +13,33 @@ import java.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
 @RestController
 public class ImageController {
 
-    private final RestClient restClient;
+    private static RestClient restClient;
 
     public ImageController(RestClient.Builder restClientBuilder, @Value("${weather.api}") String weatherEndpoint) {
-        this.restClient = restClientBuilder.baseUrl("").build();
+        restClient = restClientBuilder.baseUrl("").build();
     }
     
-    @GetMapping("/api/image")
-    public void getImage(
-            @RequestParam(value = "weather", required = false) String weather,
-            @RequestParam(value = "time", required = false) String time,
-            @RequestParam(value = "location", required = false) String location,
-            @Value("${gcloud.auth.access.token}") String authAccessToken) {
+    public static void getImage(
+            String weather,
+            String time,
+            String city,
+            String state,
+            String country,
+            String authAccessToken
+        ) {
 
-        String prompt = String.format("Generate an image depicting %s weather at %s in %s.", weather, time, location);
+        String prompt;
+        if (state == null) {
+            prompt = String.format("Generate an image depicting %s weather at %s in %s, %s.", weather, time, city, country);
+        } else {
+            prompt = String.format("Generate an image depicting %s weather at %s in %s, %s %s.", weather, time, city, state, country);
+        }
 
         // Build the request payload
         Map<String, Object> request = new HashMap<>();
@@ -48,7 +53,7 @@ public class ImageController {
         request.put("parameters", parameters);
 
         String url = "https://us-east1-aiplatform.googleapis.com/v1/projects/weather-view-466219/locations/us-east1/publishers/google/models/imagen-3.0-generate-002:predict";
-        ResponseEntity<Image> responseEntity = this.restClient.post()
+        ResponseEntity<Image> responseEntity = restClient.post()
             .uri(url)
             .header("Authorization", "Bearer " + authAccessToken)
             .contentType(MediaType.APPLICATION_JSON)
