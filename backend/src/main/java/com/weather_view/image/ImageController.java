@@ -77,7 +77,6 @@ public class ImageController {
                 e.printStackTrace();
             }
 
-            System.out.println("Image saved to: " + imagePath.toAbsolutePath());
         } else {
             throw new RuntimeException("No predictions found in the response.");
         }
