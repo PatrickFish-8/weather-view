@@ -2,19 +2,18 @@
 import { useState } from 'react';
 import UserInput from '@/components/UserInput';
 import Loading from '@/components/Loading';
+import WeatherOutput from '@/components/WeatherOutput';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState(false);
 
-  const handleSearch = async (location: string) => {
+  const handleSearch = async (city: string, state: string, country: string) => {
     setIsLoading(true);
     try {
-      // const res = await fetch('');
-      // const data = await res.json();
-      // setWeather(data);
+      console.log(city, state, country);
       await new Promise(resolve => setTimeout(resolve, 3000));
-      setWeather(" ");
+      setWeather(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -25,7 +24,7 @@ export default function Home() {
   return (
       <div className="flex flex-col items-center justify-center h-screen w-screen bg-[#777]">
         { weather ? (
-          <div>Weather Info</div>
+          <WeatherOutput />
         ) : (
           isLoading ? (
             <Loading />
