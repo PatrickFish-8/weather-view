@@ -1,7 +1,7 @@
 export default function WeatherOutput() {
     return (
-        <>
-            Hello World
-        </>
+        <div>
+            <img src="./generated_image.png"/>
+        </div>
     )
 }
