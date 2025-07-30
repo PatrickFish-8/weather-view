@@ -1,6 +1,7 @@
 package com.weather_view.entrypoint;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ import com.weather_view.image.ImageController;
 public class EntryController {
     
     @GetMapping("/api/entry")
-    public static boolean getEntry(
+    public static ResponseEntity<Object> getEntry(
         @RequestParam("city") String city,
         @RequestParam(value = "state", required=false) String state,
         @RequestParam("country") String country,
@@ -343,10 +344,10 @@ public class EntryController {
     
             // generate image using information
             ImageController.getImage(currWeather, localTime, city, state, country, authAccessToken);
-            return true;
+            return ResponseEntity.status(200).build();
         } catch (Exception e) {
             System.out.println("Exception thrown: " + e);
-            return false;
+            return ResponseEntity.status(400).build();
         }
     }
 }
