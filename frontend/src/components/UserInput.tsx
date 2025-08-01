@@ -36,6 +36,7 @@ export default function UserInput(
                         input: {
                             backgroundColor: "#f2f0ef",
                             color: '#28231C',
+                            fontFamily: 'Pixelify Sans',
                         },
                     }}
                 />
@@ -107,6 +108,7 @@ export default function UserInput(
                         input: {
                             backgroundColor: "#f2f0ef",
                             color: '#28231C',
+                            fontFamily: 'Pixelify Sans',
                         },
                     }}
                 />
@@ -375,6 +377,7 @@ export default function UserInput(
                         input: {
                             backgroundColor: "#f2f0ef",
                             color: '#28231C',
+                            fontFamily: 'Pixelify Sans',
                         },
                     }}
                 />

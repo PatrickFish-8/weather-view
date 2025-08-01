@@ -28,7 +28,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error(error);
-      alert("An Error Occurred" + error)
+      alert("An Error Occurred: " + error)
     } finally {
       setIsLoading(false);
     }
