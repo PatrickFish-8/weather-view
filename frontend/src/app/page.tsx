@@ -34,6 +34,7 @@ export default function Home() {
       setIsLoading(false);
     }
   }
+  
 
   return (
       <div className="flex flex-col items-center justify-center h-screen w-screen bg-[#777]">
