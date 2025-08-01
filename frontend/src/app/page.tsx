@@ -3,14 +3,13 @@ import { useState } from 'react';
 import UserInput from '@/components/UserInput';
 import Loading from '@/components/Loading';
 import WeatherOutput from '@/components/WeatherOutput';
+import Background from '@/components/Background';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [weather, setWeather] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   const handleSearch = async (city: string, state: string, country: string) => {
-    setIsError(false);
     setIsLoading(true);
     try {
       console.log(city, state, country);
@@ -25,19 +24,19 @@ export default function Home() {
       if (response.ok) {
         setWeather(true);
       } else {
-        setIsError(true);
+        alert("An Error Occurred")
       }
     } catch (error) {
       console.error(error);
-      setIsError(true);
+      alert("An Error Occurred" + error)
     } finally {
       setIsLoading(false);
     }
   }
-  
+
 
   return (
-      <div className="flex flex-col items-center justify-center h-screen w-screen bg-[#777]">
+    <div className="flex flex-col items-center justify-center h-screen w-screen">
         { weather ? (
           <WeatherOutput />
         ) : (
@@ -46,9 +45,6 @@ export default function Home() {
           ) : (
             <>
               <UserInput onSearch={handleSearch}/>
-              {isError && (
-                <h1>Error Occurred</h1>
-              )}
             </>
           )
         )}

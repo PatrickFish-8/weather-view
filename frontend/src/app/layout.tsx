@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import '@mantine/core/styles.css'
 import "./globals.css";
 import { createTheme, MantineProvider } from "@mantine/core";
+import Background from "@/components/Background"
 
 export const metadata: Metadata = {
   title: "weather-view",
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body>
         <MantineProvider theme={theme}>
+          <Background/>
           {children}
         </MantineProvider>
       </body>
