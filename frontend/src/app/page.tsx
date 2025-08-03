@@ -34,20 +34,24 @@ export default function Home() {
     }
   }
 
+  const onReset = () => {
+    setIsLoading(false);
+    setWeather(false);
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">
-        { weather ? (
-          <WeatherOutput />
+      { weather ? (
+        <WeatherOutput onReset={onReset}/>
+      ) : (
+        isLoading ? (
+          <Loading />
         ) : (
-          isLoading ? (
-            <Loading />
-          ) : (
-            <>
-              <UserInput onSearch={handleSearch}/>
-            </>
-          )
-        )}
-      </div>
+          <>
+            <UserInput onSearch={handleSearch}/>
+          </>
+        )
+      )}
+    </div>
   );
 }
